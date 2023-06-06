@@ -42,13 +42,20 @@ local function get_results()
   local results = {}
   local changes = vim.api.nvim_exec2("changes", { output = true }).output
 
-  -- delete the first line (header)
-  changes = changes:gsub("[^\r\n]+", "", 1)
-
-  for change in changes:gmatch("[^\r\n]+") do
-    table.insert(results, parse_change(change))
+  for line in changes:gmatch("[^\r\n]+") do
+    local change = parse_change(line)
+    -- skip unwanted lines (header, last line if it only contains a ">")
+    if change.line ~= nil then
+      table.insert(results, parse_change(line))
+    end
   end
-  return results
+
+  local reversed_results = {}
+  for i = #results, 1, -1 do
+    table.insert(reversed_results, results[i])
+  end
+
+  return reversed_results
 end
 
 local function show_changes(opts)
