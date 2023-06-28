@@ -46,16 +46,12 @@ local function get_results()
     local change = parse_change(line)
     -- skip unwanted lines (header, last line if it only contains a ">")
     if change.line ~= nil then
-      table.insert(results, parse_change(line))
+      -- insert at the beginning of the table so that the most recent change is at the top
+      table.insert(results, 1, parse_change(line))
     end
   end
 
-  local reversed_results = {}
-  for i = #results, 1, -1 do
-    table.insert(reversed_results, results[i])
-  end
-
-  return reversed_results
+  return results
 end
 
 local function show_changes(opts)
