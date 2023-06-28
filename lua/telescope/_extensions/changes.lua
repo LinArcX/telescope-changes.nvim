@@ -47,7 +47,7 @@ local function get_results()
     -- skip unwanted lines (header, last line if it only contains a ">")
     if change.line ~= nil then
       -- insert at the beginning of the table so that the most recent change is at the top
-      table.insert(results, 1, parse_change(line))
+      table.insert(results, 1, change)
     end
   end
 
